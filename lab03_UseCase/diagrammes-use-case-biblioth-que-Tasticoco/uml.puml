@@ -1,0 +1,47 @@
+@startuml biblio
+left to right direction
+
+rectangle "Bibliothèque" as B {
+    usecase (S'identifie) as iden
+    usecase (Identification carte) as idenca
+    usecase (Identification mot de passe) as idenmdp
+    usecase (Verifie dispo) as vdisp
+    usecase (Enregistre prêt) as enrp
+    usecase (Validation identification) as validen
+    usecase (Prêt inter-bibliothèque) as pintb
+    usecase (Mise en liste d'attente) as liat
+    usecase (Emprunter livre) as empli
+    usecase (Aide recherche) as aire
+}
+
+actor "Lecteurs" as lect
+actor "Bibliothéquaire" as bibl
+actor "Serveur d'authentification" as sa
+actor "Bibliothéqaire spécialisé" as bibls
+
+lect -- empli
+lect -- aire
+
+sa -up- validen
+
+empli ..> idenca : <<includes>>
+empli ..> vdisp : <<includes>>
+
+vdisp <.. liat : <<extends>>
+vdisp <.. pintb : <<extends>>
+vdisp <.. enrp : <<extends>>
+
+validen ..> iden : <<includes>>
+iden <|-left- idenca
+iden <|-left- idenmdp
+
+bibls -left-|> bibl
+
+iden -- bibl
+vdisp -- bibl
+aire -- bibls
+
+B -[hidden]- bibl
+B -[hidden]- bibls
+
+@enduml

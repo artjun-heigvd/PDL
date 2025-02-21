@@ -1,0 +1,46 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+participant ":CompteUtilisateur" as U
+participant ":Commande" as C
+participant "billets[i]:Billets" as B
+participant ":Place" as P
+participant ":Tarif" as T
+participant ":MoyenDePaiement" as MdP
+participant ":Messagerie" as M
+
+U -> C: finaliserCommande()
+C -> C: prixTotal()
+
+loop
+    C -> B: billets[i]
+    B -> P: getPrix()
+    P -> T: getPrix()
+    T -> C: prix
+
+    note over C
+        tarifTotal += prix
+    end note
+end
+
+C -> U: tarifTotal
+
+U -> C: payer()
+C -> U: choixMoyenDePaiement()
+U -> C: MoyenDePaiement
+
+
+C -> MdP: payer(MoyenDePaiement)
+MdP -> MdP : verification()
+
+alt paiement accepté
+    MdP -> C : paiementAccepté()
+    C --> U: paiementAccepté()
+    C -> M : infosBillets(email)
+    M -> M : envoiBillets(email)
+else paiement refusé
+    MdP -> C : paiementRefusé()
+    C -> U : paiementRefusé()
+end
+
+@enduml

@@ -1,0 +1,12 @@
+@startuml sport
+
+class Sport{}
+class Cours{}
+class Salle{}
+class Participant{
+    nom
+}
+class Moniteur{}
+class {}
+class "Créneau horaire"{}
+@enduml

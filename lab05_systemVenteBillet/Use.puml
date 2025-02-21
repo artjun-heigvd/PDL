@@ -1,0 +1,51 @@
+@startuml USECASE
+left to right direction
+
+actor Utilisateur as U
+actor "Messagerie" as M
+actor "Système de la banque" as B
+actor "Serveur d'authentification" as S
+actor Administrateurs as A
+actor "Entreprise d'organisation de concert" as E
+
+
+rectangle billeterie {
+    usecase "Créer un compte" as UC1
+    usecase "Se connecter" as UC2
+    usecase "2FA" as UC3
+    usecase "Vérification serveur" as UC4
+    usecase "Consulter info concert" as UC5
+    usecase "Réserver billet(s)" as UC6
+    usecase "Vérifier dispo" as UC7
+    usecase "Payement billet(s)" as UC8
+    usecase "Envoyer confirmation" as UC9
+    usecase "CB" as UC10
+    usecase "Paypal" as UC11
+    usecase "Modifier infos concerts" as UC12
+}
+
+E -- billeterie
+U <|- A
+U -- UC1
+U -- UC2
+UC2 <.. "extends" UC3
+UC1 ..> "includes" UC4
+UC2 ..> "includes" UC4
+M -[hidden]left- billeterie
+M -[hidden]down- B
+B -[hidden]left- billeterie
+UC9 -down-- M
+UC4 -- S
+U -- UC5
+U - UC6
+UC6 ..> "includes" UC7
+UC6 ..> "includes" UC8
+UC6 ..> "includes" UC9
+UC8 <|- UC10
+UC8 <|-- UC11
+UC8 -- B
+A -- UC12
+
+
+
+@enduml

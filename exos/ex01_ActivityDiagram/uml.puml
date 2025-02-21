@@ -1,0 +1,28 @@
+@startuml a
+start
+:Verifier carte client;
+if() then (Carte validée)
+    :Vérifier code;
+    if() then (Code validé)
+        :Demande d'autorisation de retrait à VISA;
+        if() then (Autorisation accordée)
+            :Demande de montant à retirer;
+            :Vérification du montant si valide;
+            if() then (Montant valide)
+                :Ejection de la carte;
+                :Ejection de l'argent;
+                :Impression du reçu;
+            else(Montant non valide)
+            endif
+        else(Autorisation refusée)
+        endif
+    elseif() then (Code non valide < 3) 
+        backward :Retour à la vérification du code;
+    else(Code non validé >= 3)
+
+    endif
+else(Carte non validée)
+    :Annulation transaction;
+endif
+stop
+@enduml

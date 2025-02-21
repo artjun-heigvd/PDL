@@ -1,0 +1,56 @@
+@startuml HauteEcole
+skinparam Linetype polyline
+
+abstract class Membres {
+    - nom : text
+    - prenom : text
+}
+
+class Etudiant {}
+
+class Professeur {}
+
+class Filliere {
+    Cette classe est créée pour\n anticiper le fait que\n plusieurs étudiants\n différents peuvent appartenir\n à la même fillière.
+
+}
+
+class Institut {
+    Cette classe est créée pour\n anticiper le fait que\n plusieurs professeurs\n différents peuvent travailler\n dans la même institution.
+}
+
+class Assistant{}
+
+class Cours {}
+
+class Discipline {}
+
+class Expertise {
+    - niv {1..4} : int
+}
+
+Etudiant "*" -- "1" Filliere : appartient à >
+
+Professeur "*" --r "1" Institut : travail dans >
+
+Assistant "0..3" -- "*" Cours : encadre >
+Professeur "1" -- "*" Cours : donne >
+Etudiant "5..*" -- "*" Cours : suit > 
+Discipline "1" -- "*" Cours : à propos <
+
+Discipline "1..*" --- "2..*" Professeur : Est expert <
+
+Assistant --  Discipline
+(Assistant, Discipline) .. Expertise
+
+circle " " as c
+
+Membres <|-- c
+
+c -- Etudiant
+c -- Professeur
+c -- Assistant
+
+
+hide empty members
+@enduml

@@ -1,0 +1,103 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Concert {
+    date
+    heure
+}
+
+class Billet {
+    id
+    getPrix()
+}
+
+class Artiste {
+    nom
+}
+
+class MoyenDePaiement {
+    verification()
+    paiementAccepte()
+    paiementRefuse()
+    envoiBillets()
+    infosBillets(email)
+}
+
+class CB {
+    numero
+    date expiration
+    cvv
+}
+
+class Paypal {
+email
+}
+
+class Messagerie {
+    envoiBillets(email)
+}
+
+class Admin {
+
+}
+
+class CompteUtilisateur {
+    motDePasse
+    email
+    finaliserCommande()
+    payer()
+}
+
+'La capacité de la salle est déduite du nombre de places
+class Salle {
+    nom
+}
+
+class Place {
+    numero
+    disponibilite
+    getPrix()
+}
+
+class Commande {
+    prixTotal()
+    choixMoyenDePaiement()
+    paiementAccepte()
+    paiementRefuse()
+}
+
+class Tarif {
+    prix
+}
+
+
+Concert "*" -- "1" Salle : "a lieu dans" >
+Concert "*" -- "1..*" Artiste : "participe à" <
+Salle "1" *-- "1..*" Place
+Commande "1" -- "1" Messagerie : utilise >
+MoyenDePaiement <|-- CB
+MoyenDePaiement <|-- Paypal
+Commande "*" -- "1" MoyenDePaiement : "utilise" >
+Commande "*" -- "1" CompteUtilisateur : "est passée par" >
+Concert  "*" -- "1..*" Place
+(Concert, Place) "1" .. "1..*" Tarif
+
+CompteUtilisateur <|-- Admin
+Admin "*" -- "*" Concert : "peut modifier" >
+Commande "1" -- "1..*" Place : "réserve" >
+(Commande, Place) .. Billet
+
+note right of Tarif
+    Les places appartiennent
+    à la salle dans laquelle
+    le concert a lieu
+end note
+
+note right of Billet
+    On ne peut pas commander plusieurs
+    fois le même billet dans une même
+    commande et on ne peut pas commander
+    le billet d'une place non disponible
+end note
+
+@enduml
